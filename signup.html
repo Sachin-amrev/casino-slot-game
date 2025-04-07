@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sign Up</title>
+  <style>
+    body {
+      font-family: Arial;
+      background-color: #111;
+      color: white;
+      text-align: center;
+      padding-top: 50px;
+    }
+    input {
+      padding: 10px;
+      margin: 10px;
+      width: 250px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 30px;
+      font-size: 18px;
+      cursor: pointer;
+      background-color: gold;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>Sign Up</h2>
+  <input type="text" id="mobile" placeholder="Mobile Number"><br>
+  <input type="password" id="password" placeholder="Password"><br>
+  <input type="password" id="confirm" placeholder="Confirm Password"><br>
+  <button onclick="signup()">Register</button>
+
+  <p>Already have an account? <a href="login.html" style="color:gold;">Login</a></p>
+
+  <script>
+    function signup() {
+      const mobile = document.getElementById("mobile").value;
+      const pass = document.getElementById("password").value;
+      const confirm = document.getElementById("confirm").value;
+
+      if (pass !== confirm) {
+        alert("Passwords do not match");
+        return;
+      }
+
+      if (localStorage.getItem(mobile)) {
+        alert("User already exists!");
+        return;
+      }
+
+      const userData = {
+        password: pass,
+        wallet: 0
+      };
+      localStorage.setItem(mobile, JSON.stringify(userData));
+      alert("Signup successful!");
+      window.location.href = "login.html";
+    }
+  </script>
+</body>
+</html>

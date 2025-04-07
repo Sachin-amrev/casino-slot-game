@@ -1,0 +1,154 @@
+<!DOCTYPE html><html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casino Slot Machine</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background-color: #222;
+            color: white;
+        }
+        .wallet {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 10px;
+            color: gold;
+        }
+        .deposit-container {
+            margin-top: 10px;
+        }
+        .deposit-button {
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            background-color: green;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            color: white;
+            margin-top: 10px;
+        }
+        .deposit-input {
+            width: 100px;
+            padding: 5px;
+            font-size: 18px;
+            text-align: center;
+        }
+        .slot-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+        }
+        .slot {
+            width: 80px;
+            height: 80px;
+            font-size: 50px;
+            text-align: center;
+            line-height: 80px;
+            border: 3px solid gold;
+            margin: 10px;
+            background: black;
+            border-radius: 10px;
+        }
+        .spin-button {
+            padding: 15px 30px;
+            font-size: 20px;
+            margin-top: 20px;
+            cursor: pointer;
+            background-color: gold;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            color: black;
+        }
+        .result-message {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+            display: none;
+        }
+        @keyframes spin {
+            0% { transform: rotateX(0deg); }
+            100% { transform: rotateX(360deg); }
+        }
+    </style>
+    <script>
+      // Login check
+      if (localStorage.getItem("loggedIn") !== "true") {
+          alert("Please login first!");
+          window.location.href = "login.html";
+      }
+    </script>
+</head>
+<body>
+    <div class="wallet" id="wallet">Wallet: ₹0</div>
+    <div class="deposit-container">
+        <input class="deposit-input" type="number" id="depositAmount" placeholder="Enter ₹" />
+        <button class="deposit-button" onclick="depositMoney()">Deposit</button>
+    </div>
+    <div class="slot-container">
+        <div class="slot" id="slot1">🍒</div>
+        <div class="slot" id="slot2">🍋</div>
+        <div class="slot" id="slot3">🍊</div>
+    </div>
+    <button class="spin-button" onclick="spinSlots()">Spin</button>
+    <div class="result-message" id="resultMessage"></div><script>
+    const emojis = ["🍒", "🍋", "🍊", "🍉", "⭐", "🔔"];
+    let walletBalance = 0;
+
+    function updateWalletDisplay() {
+        document.getElementById("wallet").innerText = `Wallet: ₹${walletBalance}`;
+    }
+
+    function depositMoney() {
+        const amount = parseInt(document.getElementById("depositAmount").value);
+        if (!isNaN(amount) && amount > 0) {
+            walletBalance += amount;
+            updateWalletDisplay();
+        }
+    }
+
+    function spinSlots() {
+        if (walletBalance < 10) {
+            alert("You need at least ₹10 to play!");
+            return;
+        }
+
+        walletBalance -= 10;
+        updateWalletDisplay();
+
+        const results = [
+            emojis[Math.floor(Math.random() * emojis.length)],
+            emojis[Math.floor(Math.random() * emojis.length)],
+            emojis[Math.floor(Math.random() * emojis.length)]
+        ];
+
+        document.getElementById("slot1").innerText = results[0];
+        document.getElementById("slot2").innerText = results[1];
+        document.getElementById("slot3").innerText = results[2];
+
+        const messageElement = document.getElementById("resultMessage");
+
+        if (results[0] === results[1] && results[1] === results[2]) {
+            walletBalance += 100;
+            updateWalletDisplay();
+            messageElement.innerText = "Jackpot! You won ₹100!";
+            messageElement.style.color = "lime";
+        } else if (results[0] === results[1] || results[1] === results[2] || results[0] === results[2]) {
+            walletBalance += 20;
+            updateWalletDisplay();
+            messageElement.innerText = "Nice! You won ₹20!";
+            messageElement.style.color = "yellow";
+        } else {
+            messageElement.innerText = "Better luck next time!";
+            messageElement.style.color = "red";
+        }
+        messageElement.style.display = "block";
+    }
+</script>
+
+</body>
+</html>
